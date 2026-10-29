@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -43,12 +46,16 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+/**
+ * Main Timeline screen composable displaying today's financial weather header,
+ * 7-day outlook carousel, and a countdown list of upcoming transactions.
+ */
 @Composable
 fun TimelineScreen(
     uiState: UiState,
     onEditTransaction: (Transaction) -> Unit,
     onDeleteTransaction: (Transaction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val todayForecast = uiState.forecasts.firstOrNull()
     val upcomingDaysWithTransactions = uiState.forecasts.filter { it.transactions.isNotEmpty() }
@@ -57,53 +64,58 @@ fun TimelineScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        // Today's forecast header card.
         item {
             Spacer(modifier = Modifier.height(8.dp))
             todayForecast?.let { forecast ->
-                ForecastHeaderCard(forecast = forecast, comfortFloor = uiState.comfortFloor)
+                ForecastHeaderCard(forecast = forecast)
             }
         }
 
+        // 7-day weather outlook row.
         item {
             Text(
                 text = "7-Day Financial Outlook",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(8.dp))
             SevenDayOutlookRow(forecasts = uiState.forecasts.take(7))
         }
 
+        // Section header for upcoming transactions.
         item {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Upcoming Timeline",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
 
+        // Empty state card when no upcoming transactions exist.
         if (upcomingDaysWithTransactions.isEmpty()) {
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 ) {
                     Text(
                         text = "No upcoming transactions recorded.",
                         modifier = Modifier.padding(24.dp),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }
         } else {
+            // Render upcoming transaction timeline cards.
             items(upcomingDaysWithTransactions) { forecast ->
                 TimelineDayCard(
                     forecast = forecast,
                     onEditTransaction = onEditTransaction,
-                    onDeleteTransaction = onDeleteTransaction
+                    onDeleteTransaction = onDeleteTransaction,
                 )
             }
         }
@@ -114,30 +126,34 @@ fun TimelineScreen(
     }
 }
 
+/**
+ * Top header card displaying today's weather condition name, icon, description,
+ * projected balance, and comfort buffer offset.
+ */
 @Composable
-fun ForecastHeaderCard(forecast: DailyForecast, comfortFloor: Double) {
+fun ForecastHeaderCard(forecast: DailyForecast) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
                     Text(
                         text = "Today's Forecast",
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
                     )
                     Text(
                         text = forecast.condition.displayName,
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 WeatherIcon(condition = forecast.condition, size = 48.dp)
@@ -147,39 +163,39 @@ fun ForecastHeaderCard(forecast: DailyForecast, comfortFloor: Double) {
             Text(
                 text = forecast.condition.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column {
                     Text(
                         text = "Projected Balance",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
                     )
                     Text(
                         text = "$%.2f".format(forecast.projectedBalance),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = "Comfort Buffer",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
                     )
                     val bufferText = if (forecast.buffer >= 0) "+$%.2f".format(forecast.buffer) else "-$%.2f".format(-forecast.buffer)
                     Text(
                         text = bufferText,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (forecast.buffer >= 0) Color(0xFF2E7D32) else Color(0xFFC62828)
+                        color = if (forecast.buffer >= 0) Color(0xFF2E7D32) else Color(0xFFC62828),
                     )
                 }
             }
@@ -187,30 +203,33 @@ fun ForecastHeaderCard(forecast: DailyForecast, comfortFloor: Double) {
     }
 }
 
+/**
+ * Horizontal row displaying a 7-day weather icon and projected balance outlook.
+ */
 @Composable
 fun SevenDayOutlookRow(forecasts: List<DailyForecast>) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(forecasts) { forecast ->
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = forecast.date.format(DateTimeFormatter.ofPattern("E")),
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = forecast.date.format(DateTimeFormatter.ofPattern("d")),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     WeatherIcon(condition = forecast.condition, size = 24.dp)
@@ -218,7 +237,7 @@ fun SevenDayOutlookRow(forecasts: List<DailyForecast>) {
                     Text(
                         text = "$%.0f".format(forecast.projectedBalance),
                         style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }
             }
@@ -226,15 +245,18 @@ fun SevenDayOutlookRow(forecasts: List<DailyForecast>) {
     }
 }
 
+/**
+ * Timeline card displaying transactions occurring on a specific upcoming date,
+ * showing proximity countdown (e.g., "Today", "Tomorrow", "In 3 days").
+ */
 @Composable
 fun TimelineDayCard(
     forecast: DailyForecast,
     onEditTransaction: (Transaction) -> Unit,
-    onDeleteTransaction: (Transaction) -> Unit
+    onDeleteTransaction: (Transaction) -> Unit,
 ) {
     val today = LocalDate.now()
-    val daysAway = ChronoUnit.DAYS.between(today, forecast.date)
-    val proximityText = when (daysAway) {
+    val proximityText = when (val daysAway = ChronoUnit.DAYS.between(today, forecast.date)) {
         0L -> "Today"
         1L -> "Tomorrow"
         else -> "In $daysAway days (${forecast.date.format(DateTimeFormatter.ofPattern("MMM d"))})"
@@ -244,13 +266,13 @@ fun TimelineDayCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     WeatherIcon(condition = forecast.condition, size = 20.dp)
@@ -259,13 +281,13 @@ fun TimelineDayCard(
                         text = proximityText,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 Text(
                     text = "Bal: $%.2f".format(forecast.projectedBalance),
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -277,23 +299,23 @@ fun TimelineDayCard(
                         .fillMaxWidth()
                         .padding(vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     ) {
                         Surface(
                             shape = CircleShape,
                             color = if (tx.type == TransactionType.INCOME) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp),
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = if (tx.type == TransactionType.INCOME) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
                                     contentDescription = null,
                                     tint = if (tx.type == TransactionType.INCOME) Color(0xFF2E7D32) else Color(0xFFC62828),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                             }
                         }
@@ -302,12 +324,12 @@ fun TimelineDayCard(
                             Text(
                                 text = tx.title,
                                 style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
                             )
                             Text(
                                 text = tx.recurrence.name.lowercase().replaceFirstChar { it.uppercase() },
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     }
@@ -319,7 +341,7 @@ fun TimelineDayCard(
                             text = "$amountPrefix%.2f".format(tx.amount),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
-                            color = amountColor
+                            color = amountColor,
                         )
                         IconButton(onClick = { onEditTransaction(tx) }, modifier = Modifier.size(32.dp)) {
                             Icon(Icons.Default.Edit, contentDescription = "Edit", modifier = Modifier.size(16.dp))

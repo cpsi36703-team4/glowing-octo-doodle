@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +13,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -29,12 +33,15 @@ import com.rainyday.domain.model.Transaction
 import com.rainyday.domain.model.TransactionType
 import java.time.LocalDate
 
+/**
+ * Dialog overlay allowing users to create a new income/expense transaction or edit an existing one.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditTransactionDialog(
     transaction: Transaction?,
     onDismiss: () -> Unit,
-    onSave: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit
+    onSave: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit,
 ) {
     var title by remember { mutableStateOf(transaction?.title ?: "") }
     var amountText by remember { mutableStateOf(transaction?.amount?.toString() ?: "") }
@@ -42,7 +49,7 @@ fun AddEditTransactionDialog(
     var recurrence by remember { mutableStateOf(transaction?.recurrence ?: RecurrenceRule.MONTHLY) }
     var daysAheadOffset by remember { mutableStateOf("0") }
 
-    var expandedRecurrence by remember { mutableStateOf(false) }
+    var expandedRecurrence by remember { mutableStateOf(value = false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -53,14 +60,14 @@ fun AddEditTransactionDialog(
                     SegmentedButton(
                         selected = type == TransactionType.EXPENSE,
                         onClick = { type = TransactionType.EXPENSE },
-                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
                     ) {
                         Text("Expense")
                     }
                     SegmentedButton(
                         selected = type == TransactionType.INCOME,
                         onClick = { type = TransactionType.INCOME },
-                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
                     ) {
                         Text("Income")
                     }
@@ -71,7 +78,7 @@ fun AddEditTransactionDialog(
                     onValueChange = { title = it },
                     label = { Text("Title") },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 OutlinedTextField(
@@ -80,12 +87,12 @@ fun AddEditTransactionDialog(
                     label = { Text("Amount ($)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 ExposedDropdownMenuBox(
                     expanded = expandedRecurrence,
-                    onExpandedChange = { expandedRecurrence = !expandedRecurrence }
+                    onExpandedChange = { expandedRecurrence = !expandedRecurrence },
                 ) {
                     OutlinedTextField(
                         value = recurrence.name.lowercase().replaceFirstChar { it.uppercase() },
@@ -93,11 +100,11 @@ fun AddEditTransactionDialog(
                         readOnly = true,
                         label = { Text("Recurrence") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedRecurrence) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
                         expanded = expandedRecurrence,
-                        onDismissRequest = { expandedRecurrence = false }
+                        onDismissRequest = { expandedRecurrence = false },
                     ) {
                         RecurrenceRule.entries.forEach { rule ->
                             DropdownMenuItem(
@@ -105,7 +112,7 @@ fun AddEditTransactionDialog(
                                 onClick = {
                                     recurrence = rule
                                     expandedRecurrence = false
-                                }
+                                },
                             )
                         }
                     }
@@ -117,7 +124,7 @@ fun AddEditTransactionDialog(
                     label = { Text("Starts in (days from today)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
@@ -127,10 +134,10 @@ fun AddEditTransactionDialog(
                     val amount = amountText.toDoubleOrNull() ?: 0.0
                     val offset = daysAheadOffset.toLongOrNull() ?: 0L
                     val startDate = LocalDate.now().plusDays(offset)
-                    if (title.isNotBlank() && amount > 0) {
+                    if ((title.isNotBlank()) && (amount > 0)) {
                         onSave(title, amount, type, startDate, recurrence)
                     }
-                }
+                },
             ) {
                 Text("Save")
             }
@@ -139,6 +146,6 @@ fun AddEditTransactionDialog(
             TextButton(onClick = onDismiss) {
                 Text("Cancel")
             }
-        }
+        },
     )
 }
