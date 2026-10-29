@@ -5,11 +5,10 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.NoTitleBar">
+        android:theme="@style/Theme.RainyDay">
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.Material.NoTitleBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

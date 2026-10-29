@@ -36,6 +36,11 @@ local.properties
 .idea/modules.xml
 .idea/deploymentTargetSelector.xml
 .idea/deviceManager.xml
+.idea/AndroidProjectSystem.xml
+.idea/runConfigurations.xml
+.idea/compiler.xml
+.idea/migrations.xml
+.idea/.name
 *.iml
 .kotlin/
 
