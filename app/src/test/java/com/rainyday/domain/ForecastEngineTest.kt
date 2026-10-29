@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.domain
 
 import com.rainyday.domain.model.ForecastCondition
@@ -5,11 +8,13 @@ import com.rainyday.domain.model.RecurrenceRule
 import com.rainyday.domain.model.Transaction
 import com.rainyday.domain.model.TransactionType
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.LocalDate
 
+/**
+ * Unit tests validating [ForecastEngine] calculation logic, condition mapping, and recurrence rules.
+ */
 class ForecastEngineTest {
 
     private val startDate = LocalDate.of(2026, 10, 1)
@@ -22,8 +27,8 @@ class ForecastEngineTest {
                 amount = 2000.0,
                 type = TransactionType.INCOME,
                 startDate = startDate,
-                recurrence = RecurrenceRule.MONTHLY
-            )
+                recurrence = RecurrenceRule.MONTHLY,
+            ),
         )
 
         val forecasts = ForecastEngine.calculateForecasts(
@@ -31,7 +36,7 @@ class ForecastEngineTest {
             comfortFloor = 500.0,
             transactions = transactions,
             startDate = startDate,
-            daysAhead = 7
+            daysAhead = 7,
         )
 
         assertEquals(7, forecasts.size)
@@ -49,8 +54,8 @@ class ForecastEngineTest {
                 amount = 1200.0,
                 type = TransactionType.EXPENSE,
                 startDate = startDate,
-                recurrence = RecurrenceRule.ONCE
-            )
+                recurrence = RecurrenceRule.ONCE,
+            ),
         )
 
         val forecasts = ForecastEngine.calculateForecasts(
@@ -58,7 +63,7 @@ class ForecastEngineTest {
             comfortFloor = 300.0,
             transactions = transactions,
             startDate = startDate,
-            daysAhead = 3
+            daysAhead = 3,
         )
 
         val day1 = forecasts[0]
@@ -74,8 +79,8 @@ class ForecastEngineTest {
                 amount = 300.0,
                 type = TransactionType.EXPENSE,
                 startDate = startDate,
-                recurrence = RecurrenceRule.ONCE
-            )
+                recurrence = RecurrenceRule.ONCE,
+            ),
         )
 
         val forecasts = ForecastEngine.calculateForecasts(
@@ -83,7 +88,7 @@ class ForecastEngineTest {
             comfortFloor = 500.0,
             transactions = transactions,
             startDate = startDate,
-            daysAhead = 3
+            daysAhead = 3,
         )
 
         val day1 = forecasts[0]
@@ -99,7 +104,7 @@ class ForecastEngineTest {
             amount = 10.0,
             type = TransactionType.EXPENSE,
             startDate = startDate,
-            recurrence = RecurrenceRule.WEEKLY
+            recurrence = RecurrenceRule.WEEKLY,
         )
 
         assertTrue(weeklyTx.occursOn(startDate))
@@ -111,7 +116,7 @@ class ForecastEngineTest {
             amount = 50.0,
             type = TransactionType.EXPENSE,
             startDate = startDate,
-            recurrence = RecurrenceRule.MONTHLY
+            recurrence = RecurrenceRule.MONTHLY,
         )
 
         assertTrue(monthlyTx.occursOn(startDate))
@@ -127,8 +132,8 @@ class ForecastEngineTest {
                 amount = 1000.0,
                 type = TransactionType.INCOME,
                 startDate = payDay,
-                recurrence = RecurrenceRule.ONCE
-            )
+                recurrence = RecurrenceRule.ONCE,
+            ),
         )
 
         val forecasts = ForecastEngine.calculateForecasts(
@@ -136,7 +141,7 @@ class ForecastEngineTest {
             comfortFloor = 200.0,
             transactions = transactions,
             startDate = startDate,
-            daysAhead = 5
+            daysAhead = 5,
         )
 
         assertEquals(4, forecasts[0].daysToNextIncome)

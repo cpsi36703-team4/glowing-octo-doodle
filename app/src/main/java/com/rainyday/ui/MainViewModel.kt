@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.ui
 
 import android.app.Application
@@ -16,11 +19,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+/**
+ * Active navigation tab choices.
+ */
 enum class ActiveTab {
     TIMELINE,
-    CALENDAR
+    CALENDAR,
 }
 
+/**
+ * UI State container holding user preference settings, transactions, forecasts, and dialog visibility.
+ */
 data class UiState(
     val initialBalance: Double = 1200.00,
     val comfortFloor: Double = 500.00,
@@ -28,9 +37,12 @@ data class UiState(
     val transactions: List<Transaction> = emptyList(),
     val forecasts: List<DailyForecast> = emptyList(),
     val isAddEditOpen: Boolean = false,
-    val editingTransaction: Transaction? = null
+    val editingTransaction: Transaction? = null,
 )
 
+/**
+ * Primary ViewModel managing local repository interaction, state flow, sample data seeding, and forecast recalculation.
+ */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: TransactionRepository
@@ -59,11 +71,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             comfortFloor = currentState.comfortFloor,
             transactions = transactions,
             startDate = LocalDate.now(),
-            daysAhead = 60
+            daysAhead = 60,
         )
         _uiState.value = currentState.copy(
             transactions = transactions,
-            forecasts = forecasts
+            forecasts = forecasts,
         )
     }
 
@@ -98,7 +110,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         amount: Double,
         type: TransactionType,
         startDate: LocalDate,
-        recurrence: RecurrenceRule
+        recurrence: RecurrenceRule,
     ) {
         viewModelScope.launch {
             val editing = _uiState.value.editingTransaction
@@ -109,8 +121,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         amount = amount,
                         type = type,
                         startDate = startDate,
-                        recurrence = recurrence
-                    )
+                        recurrence = recurrence,
+                    ),
                 )
             } else {
                 repository.insert(
@@ -119,8 +131,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         amount = amount,
                         type = type,
                         startDate = startDate,
-                        recurrence = recurrence
-                    )
+                        recurrence = recurrence,
+                    ),
                 )
             }
             dismissAddEditDialog()
@@ -141,29 +153,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 amount = 1800.00,
                 type = TransactionType.INCOME,
                 startDate = today.plusDays(5),
-                recurrence = RecurrenceRule.WEEKLY
+                recurrence = RecurrenceRule.WEEKLY,
             ),
             Transaction(
                 title = "Rent",
                 amount = 950.00,
                 type = TransactionType.EXPENSE,
                 startDate = today.plusDays(2),
-                recurrence = RecurrenceRule.MONTHLY
+                recurrence = RecurrenceRule.MONTHLY,
             ),
             Transaction(
                 title = "Electric Bill",
                 amount = 110.00,
                 type = TransactionType.EXPENSE,
                 startDate = today.plusDays(3),
-                recurrence = RecurrenceRule.MONTHLY
+                recurrence = RecurrenceRule.MONTHLY,
             ),
             Transaction(
                 title = "Internet",
                 amount = 65.00,
                 type = TransactionType.EXPENSE,
                 startDate = today.plusDays(4),
-                recurrence = RecurrenceRule.MONTHLY
-            )
+                recurrence = RecurrenceRule.MONTHLY,
+            ),
         )
         sample.forEach { repository.insert(it) }
     }

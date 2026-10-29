@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,7 +23,7 @@ val LightColorScheme = lightColorScheme(
     background = Color(0xFFF8FAFC),
     surface = Color.White,
     onBackground = Color(0xFF1A1A1A),
-    onSurface = Color(0xFF1A1A1A)
+    onSurface = Color(0xFF1A1A1A),
 )
 
 val DarkColorScheme = darkColorScheme(
@@ -32,17 +35,20 @@ val DarkColorScheme = darkColorScheme(
     background = Color(0xFF12181E),
     surface = Color(0xFF1A2128),
     onBackground = Color(0xFFE2E8F0),
-    onSurface = Color(0xFFE2E8F0)
+    onSurface = Color(0xFFE2E8F0),
 )
 
+/**
+ * Rainy Day Material 3 application theme wrapper handling light and dark color schemes.
+ */
 @Composable
 fun RainyDayTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content
+        content = content,
     )
 }

@@ -1,3 +1,6 @@
+/*
+ * Note: Generated and refined with AI assistance.
+ */
 package com.rainyday.ui
 
 import android.os.Bundle
@@ -35,6 +38,9 @@ import com.rainyday.ui.screens.TimelineScreen
 import com.rainyday.ui.theme.RainyDayTheme
 import java.time.LocalDate
 
+/**
+ * Main entry activity hosting Jetpack Compose navigation, top bar, bottom navigation, and dialogs.
+ */
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
@@ -51,13 +57,16 @@ class MainActivity : ComponentActivity() {
                     onEditTransaction = viewModel::openEditTransaction,
                     onDeleteTransaction = viewModel::deleteTransaction,
                     onDismissDialog = viewModel::dismissAddEditDialog,
-                    onSaveTransaction = viewModel::saveTransaction
+                    onSaveTransaction = viewModel::saveTransaction,
                 )
             }
         }
     }
 }
 
+/**
+ * Primary scaffold composable rendering the main app bar, bottom navigation items, active tab screen, and dialogs.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppScreen(
@@ -67,7 +76,7 @@ fun MainAppScreen(
     onEditTransaction: (Transaction) -> Unit,
     onDeleteTransaction: (Transaction) -> Unit,
     onDismissDialog: () -> Unit,
-    onSaveTransaction: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit
+    onSaveTransaction: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -76,13 +85,13 @@ fun MainAppScreen(
                     Text(
                         text = "Rainy Day",
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
             )
         },
         bottomBar = {
@@ -91,39 +100,39 @@ fun MainAppScreen(
                     selected = uiState.activeTab == ActiveTab.TIMELINE,
                     onClick = { onTabSelected(ActiveTab.TIMELINE) },
                     icon = { Icon(Icons.AutoMirrored.Filled.ViewList, contentDescription = "Timeline") },
-                    label = { Text("Timeline") }
+                    label = { Text("Timeline") },
                 )
                 NavigationBarItem(
                     selected = uiState.activeTab == ActiveTab.CALENDAR,
                     onClick = { onTabSelected(ActiveTab.CALENDAR) },
                     icon = { Icon(Icons.Default.CalendarMonth, contentDescription = "Calendar") },
-                    label = { Text("Calendar") }
+                    label = { Text("Calendar") },
                 )
             }
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Transaction")
             }
-        }
+        },
     ) { paddingValues ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
         ) {
             when (uiState.activeTab) {
                 ActiveTab.TIMELINE -> TimelineScreen(
                     uiState = uiState,
                     onEditTransaction = onEditTransaction,
-                    onDeleteTransaction = onDeleteTransaction
+                    onDeleteTransaction = onDeleteTransaction,
                 )
                 ActiveTab.CALENDAR -> CalendarScreen(
-                    uiState = uiState
+                    uiState = uiState,
                 )
             }
         }
@@ -132,7 +141,7 @@ fun MainAppScreen(
             AddEditTransactionDialog(
                 transaction = uiState.editingTransaction,
                 onDismiss = onDismissDialog,
-                onSave = onSaveTransaction
+                onSave = onSaveTransaction,
             )
         }
     }
