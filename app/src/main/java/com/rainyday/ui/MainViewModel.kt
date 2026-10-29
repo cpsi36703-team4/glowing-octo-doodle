@@ -83,11 +83,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(activeTab = tab)
     }
 
+    @Suppress("unused")
     fun setInitialBalance(balance: Double) {
         _uiState.value = _uiState.value.copy(initialBalance = balance)
         recalculateForecasts(_uiState.value.transactions)
     }
 
+    @Suppress("unused")
     fun setComfortFloor(floor: Double) {
         _uiState.value = _uiState.value.copy(comfortFloor = floor)
         recalculateForecasts(_uiState.value.transactions)

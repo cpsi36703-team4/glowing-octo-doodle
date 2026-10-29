@@ -43,6 +43,7 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
     /**
      * Deletes a transaction by its primary key ID.
      */
+    @Suppress("unused")
     suspend fun deleteById(id: Long) {
         transactionDao.deleteTransactionById(id)
     }

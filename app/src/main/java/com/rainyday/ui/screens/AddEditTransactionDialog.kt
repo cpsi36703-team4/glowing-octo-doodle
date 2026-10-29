@@ -13,6 +13,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -99,7 +100,7 @@ fun AddEditTransactionDialog(
                         readOnly = true,
                         label = { Text("Recurrence") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedRecurrence) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
                         expanded = expandedRecurrence,
@@ -133,7 +134,7 @@ fun AddEditTransactionDialog(
                     val amount = amountText.toDoubleOrNull() ?: 0.0
                     val offset = daysAheadOffset.toLongOrNull() ?: 0L
                     val startDate = LocalDate.now().plusDays(offset)
-                    if (title.isNotBlank() && amount > 0) {
+                    if ((title.isNotBlank()) && (amount > 0)) {
                         onSave(title, amount, type, startDate, recurrence)
                     }
                 },
