@@ -7,9 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -90,7 +90,7 @@ fun MainAppScreen(
                 NavigationBarItem(
                     selected = uiState.activeTab == ActiveTab.TIMELINE,
                     onClick = { onTabSelected(ActiveTab.TIMELINE) },
-                    icon = { Icon(Icons.Default.ViewList, contentDescription = "Timeline") },
+                    icon = { Icon(Icons.AutoMirrored.Filled.ViewList, contentDescription = "Timeline") },
                     label = { Text("Timeline") }
                 )
                 NavigationBarItem(

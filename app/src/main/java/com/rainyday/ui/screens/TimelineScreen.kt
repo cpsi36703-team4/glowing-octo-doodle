@@ -62,7 +62,7 @@ fun TimelineScreen(
         item {
             Spacer(modifier = Modifier.height(8.dp))
             todayForecast?.let { forecast ->
-                ForecastHeaderCard(forecast = forecast, comfortFloor = uiState.comfortFloor)
+                ForecastHeaderCard(forecast = forecast)
             }
         }
 
@@ -115,7 +115,7 @@ fun TimelineScreen(
 }
 
 @Composable
-fun ForecastHeaderCard(forecast: DailyForecast, comfortFloor: Double) {
+fun ForecastHeaderCard(forecast: DailyForecast) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),

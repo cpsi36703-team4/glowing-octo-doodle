@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rainyday.domain.model.ForecastCondition
+import kotlin.math.cos
+import kotlin.math.sin
 
 val SunColor = Color(0xFFE8A90C)
 val CloudColor = Color(0xFF9AA3A8)
@@ -22,7 +24,7 @@ val StormColor = Color(0xFFC07A0A)
 fun WeatherIcon(
     condition: ForecastCondition,
     modifier: Modifier = Modifier,
-    size: Dp = 28.dp
+    size: Dp = 28.dp,
 ) {
     Canvas(modifier = modifier.size(size)) {
         val w = this.size.width
@@ -37,27 +39,27 @@ fun WeatherIcon(
                     val angle = Math.toRadians(i * 45.0)
                     val startR = w * 0.36f
                     val endR = w * 0.46f
-                    val startX = cx + (Math.cos(angle) * startR).toFloat()
-                    val startY = cy + (Math.sin(angle) * startR).toFloat()
-                    val endX = cx + (Math.cos(angle) * endR).toFloat()
-                    val endY = cy + (Math.sin(angle) * endR).toFloat()
+                    val startX = cx + (cos(angle) * startR).toFloat()
+                    val startY = cy + (sin(angle) * startR).toFloat()
+                    val endX = cx + (cos(angle) * endR).toFloat()
+                    val endY = cy + (sin(angle) * endR).toFloat()
                     drawLine(
                         color = SunColor,
                         start = Offset(startX, startY),
                         end = Offset(endX, endY),
-                        strokeWidth = w * 0.08f
+                        strokeWidth = w * 0.08f,
                     )
                 }
             }
             ForecastCondition.FAIR -> {
-                drawCircle(color = SunColor, radius = w * 0.22f, center = Offset(cx + w * 0.15f, cy - h * 0.15f))
-                drawCircle(color = CloudColor, radius = w * 0.22f, center = Offset(cx - w * 0.1f, cy + h * 0.05f))
-                drawCircle(color = CloudColor, radius = w * 0.26f, center = Offset(cx + w * 0.1f, cy))
+                drawCircle(color = SunColor, radius = w * 0.22f, center = Offset(cx + (w * 0.15f), cy - (h * 0.15f)))
+                drawCircle(color = CloudColor, radius = w * 0.22f, center = Offset(cx - (w * 0.1f), cy + (h * 0.05f)))
+                drawCircle(color = CloudColor, radius = w * 0.26f, center = Offset(cx + (w * 0.1f), cy))
                 drawRoundRect(
                     color = CloudColor,
-                    topLeft = Offset(cx - w * 0.3f, cy + h * 0.05f),
+                    topLeft = Offset(cx - (w * 0.3f), cy + (h * 0.05f)),
                     size = Size(w * 0.6f, h * 0.22f),
-                    cornerRadius = CornerRadius(h * 0.1f, h * 0.1f)
+                    cornerRadius = CornerRadius(h * 0.1f, h * 0.1f),
                 )
             }
             ForecastCondition.CLOUDY -> {

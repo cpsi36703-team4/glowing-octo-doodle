@@ -14,9 +14,9 @@ object ForecastEngine {
         comfortFloor: Double,
         transactions: List<Transaction>,
         startDate: LocalDate = LocalDate.now(),
-        daysAhead: Int = 30
+        daysAhead: Int = 30,
     ): List<DailyForecast> {
-        val forecasts = mutableListOf<DailyForecast>()
+        val forecasts = ArrayList<DailyForecast>(daysAhead)
         var currentBalance = initialBalance
 
         val incomeTransactions = transactions.filter { it.type == TransactionType.INCOME }
@@ -25,15 +25,17 @@ object ForecastEngine {
             val date = startDate.plusDays(dayOffset.toLong())
             val dayTransactions = transactions.filter { it.occursOn(date) }
 
-            val obligations = dayTransactions
-                .filter { it.type == TransactionType.EXPENSE }
-                .sumOf { it.amount }
+            var obligations = 0.0
+            var incomeReceived = 0.0
+            for (tx in dayTransactions) {
+                if (tx.type == TransactionType.EXPENSE) {
+                    obligations += tx.amount
+                } else if (tx.type == TransactionType.INCOME) {
+                    incomeReceived += tx.amount
+                }
+            }
 
-            val incomeReceived = dayTransactions
-                .filter { it.type == TransactionType.INCOME }
-                .sumOf { it.amount }
-
-            val projectedBalance = currentBalance + incomeReceived - obligations
+            val projectedBalance = (currentBalance + incomeReceived) - obligations
             val buffer = projectedBalance - comfortFloor
 
             val daysToNextIncome = calculateDaysToNextIncome(date, incomeTransactions)
@@ -50,7 +52,7 @@ object ForecastEngine {
                     buffer = buffer,
                     daysToNextIncome = daysToNextIncome,
                     condition = condition,
-                    transactions = dayTransactions
+                    transactions = dayTransactions,
                 )
             )
 

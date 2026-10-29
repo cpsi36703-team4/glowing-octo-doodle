@@ -19,7 +19,7 @@ data class Transaction(
     val amount: Double,
     val type: TransactionType,
     val startDate: LocalDate,
-    val recurrence: RecurrenceRule = RecurrenceRule.ONCE
+    val recurrence: RecurrenceRule = RecurrenceRule.ONCE,
 ) {
     /**
      * Checks if this transaction occurs on [targetDate].
@@ -30,12 +30,11 @@ data class Transaction(
             RecurrenceRule.ONCE -> targetDate == startDate
             RecurrenceRule.WEEKLY -> {
                 val daysBetween = java.time.temporal.ChronoUnit.DAYS.between(startDate, targetDate)
-                daysBetween % 7 == 0L
+                (daysBetween % 7) == 0L
             }
             RecurrenceRule.MONTHLY -> {
-                if (targetDate.dayOfMonth == startDate.dayOfMonth) true
-                else if (startDate.dayOfMonth > targetDate.lengthOfMonth() && targetDate.dayOfMonth == targetDate.lengthOfMonth()) true
-                else false
+                targetDate.dayOfMonth == startDate.dayOfMonth ||
+                    (startDate.dayOfMonth > targetDate.lengthOfMonth() && targetDate.dayOfMonth == targetDate.lengthOfMonth())
             }
         }
     }

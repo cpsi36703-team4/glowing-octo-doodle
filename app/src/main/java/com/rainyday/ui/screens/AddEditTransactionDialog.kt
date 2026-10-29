@@ -34,7 +34,7 @@ import java.time.LocalDate
 fun AddEditTransactionDialog(
     transaction: Transaction?,
     onDismiss: () -> Unit,
-    onSave: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit
+    onSave: (title: String, amount: Double, type: TransactionType, startDate: LocalDate, recurrence: RecurrenceRule) -> Unit,
 ) {
     var title by remember { mutableStateOf(transaction?.title ?: "") }
     var amountText by remember { mutableStateOf(transaction?.amount?.toString() ?: "") }
@@ -42,7 +42,7 @@ fun AddEditTransactionDialog(
     var recurrence by remember { mutableStateOf(transaction?.recurrence ?: RecurrenceRule.MONTHLY) }
     var daysAheadOffset by remember { mutableStateOf("0") }
 
-    var expandedRecurrence by remember { mutableStateOf(false) }
+    var expandedRecurrence by remember { mutableStateOf(value = false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
