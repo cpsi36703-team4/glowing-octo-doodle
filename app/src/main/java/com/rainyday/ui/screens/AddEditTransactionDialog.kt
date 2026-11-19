@@ -3,7 +3,8 @@
  */
 package com.rainyday.ui.screens
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,10 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.rainyday.domain.model.RecurrenceRule
 import com.rainyday.domain.model.Transaction
 import com.rainyday.domain.model.TransactionType
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 /**
@@ -64,6 +63,15 @@ fun AddEditTransactionDialog(
 
     var expandedRecurrence by remember { mutableStateOf(value = false) }
     var showDatePicker by remember { mutableStateOf(value = false) }
+
+    // A read-only OutlinedTextField consumes taps, so Modifier.clickable on it never fires.
+    // Watching the field's own press interactions opens the picker from anywhere on the field.
+    val startDateInteractions = remember { MutableInteractionSource() }
+    LaunchedEffect(startDateInteractions) {
+        startDateInteractions.interactions.collect { interaction ->
+            if (interaction is PressInteraction.Release) showDatePicker = true
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -145,9 +153,8 @@ fun AddEditTransactionDialog(
                             )
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showDatePicker = true },
+                    interactionSource = startDateInteractions,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
@@ -171,8 +178,7 @@ fun AddEditTransactionDialog(
     )
 
     if (showDatePicker) {
-        val initialMillis = startDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = startDate.toDatePickerMillis())
 
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
@@ -180,7 +186,7 @@ fun AddEditTransactionDialog(
                 TextButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { millis ->
-                            startDate = Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")).toLocalDate()
+                            startDate = datePickerMillisToLocalDate(millis)
                         }
                         showDatePicker = false
                     },
